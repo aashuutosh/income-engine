@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border border-gray-100 p-8 mt-6">
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Edit Project Details</h1>
+    <p class="text-gray-500 mb-8">Update your project information. (Note: This will not regenerate the AI strategy).</p>
+    <form method="POST" action="/edit/{{ project.id }}" class="space-y-6">
+        <div>
+            <label for="title" class="block text-sm font-medium text-gray-700">Project Title</label>
+            <input type="text" name="title" id="title" value="{{ project.title }}" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div>
+            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea name="description" id="description" rows="4" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ project.description }}</textarea>
+        </div>
+        <div>
+            <label for="tech_stack" class="block text-sm font-medium text-gray-700">Tech Stack</label>
+            <input type="text" name="tech_stack" id="tech_stack" value="{{ project.tech_stack }}" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+        </div>
+        <div>
+            <label for="stage" class="block text-sm font-medium text-gray-700">Current Stage</label>
+            <select name="stage" id="stage" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white">
+                <option value="Idea Phase" {% if project.stage == 'Idea Phase' %}selected{% endif %}>Idea Phase</option>
+                <option value="Prototype" {% if project.stage == 'Prototype' %}selected{% endif %}>Prototype (Hackathon)</option>
+                <option value="MVP" {% if project.stage == 'MVP' %}selected{% endif %}>MVP (Working Product)</option>
+            </select>
+        </div>
+        <div class="flex space-x-4">
+            <button type="submit" class="flex-1 justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">
+                Save Changes
+            </button>
+            <a href="/dashboard/{{ project.id }}" class="flex-1 text-center py-3 px-4 border border-gray-300 rounded-lg shadow-md text-base font-medium text-gray-700 bg-white hover:bg-gray-50">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

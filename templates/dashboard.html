@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-8 no-print">
+        <h1 class="text-3xl font-bold text-gray-900">Strategy Dashboard</h1>
+        <div class="flex flex-wrap gap-3">
+            <a href="/pitch/{{ project.id }}" target="_blank" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                Share Link
+            </a>
+            {% if g.user.id == project.user_id or g.user.is_admin %}
+            <a href="/edit/{{ project.id }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-colors">
+                Edit Details
+            </a>
+            {% endif %}
+            <button onclick="window.print()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 transition-colors">
+                Export PDF
+            </button>
+        </div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 mb-8 print-break">
+        <div class="flex flex-col sm:flex-row justify-between sm:items-start gap-4 mb-4">
+            <div class="uppercase tracking-widest text-xs text-indigo-500 font-bold">Project Overview</div>
+            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide self-start">{{ project.industry_tag }}</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6">{{ project.title }}</h2>
+        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-lg mb-6 shadow-sm">
+            <p class="text-lg sm:text-xl font-medium text-indigo-900 italic leading-relaxed">"{{ project.elevator_pitch }}"</p>
+        </div>
+        <p class="text-base sm:text-lg text-gray-700 mb-8 leading-relaxed">{{ project.description }}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-gray-100 pt-6">
+            <div>
+                <span class="block text-sm text-gray-500 font-medium uppercase tracking-wider">Tech Stack</span>
+                <span class="block text-gray-900 font-bold mt-1">{{ project.tech_stack }}</span>
+            </div>
+            <div>
+                <span class="block text-sm text-gray-500 font-medium uppercase tracking-wider">Current Stage</span>
+                <span class="block text-gray-900 font-bold mt-1">{{ project.stage }}</span>
+            </div>
+            <div>
+                <span class="block text-sm text-gray-500 font-medium uppercase tracking-wider">Creator</span>
+                <span class="block text-gray-900 font-bold mt-1">@{{ project.author.username }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 print-break mb-8">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 hover:shadow-md transition-shadow">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-3">Target Audience</h3>
+            <ul class="space-y-4">
+                {% for user in users %}
+                <li class="flex items-start">
+                    <span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-green-100 text-green-600 mr-3 mt-0.5">
+                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                    </span>
+                    <span class="text-gray-700 leading-relaxed">{{ user }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 hover:shadow-md transition-shadow">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-3">Monetization Paths</h3>
+            <ul class="space-y-4">
+                {% for path in paths %}
+                <li class="flex items-start">
+                    <span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-indigo-100 text-indigo-600 mr-3 mt-0.5">
+                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                    </span>
+                    <span class="text-gray-700 leading-relaxed">{{ path }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 print-break mb-12">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 hover:shadow-md transition-shadow">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-3">Pricing Strategy</h3>
+            <div class="text-gray-700 bg-gray-50 p-5 rounded-lg border border-gray-200 markdown-content break-words text-base leading-relaxed">
+                {{ project.pricing_idea }}
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 hover:shadow-md transition-shadow">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-3">Market Competitors</h3>
+            <ul class="space-y-4">
+                {% for comp in competitors %}
+                <li class="flex items-start">
+                    <span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-red-100 text-red-600 mr-3 mt-0.5">
+                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>
+                    </span>
+                    <span class="text-gray-700 font-medium leading-relaxed">{{ comp }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8 no-print mb-10">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6">Community Feedback</h3>
+        {% if not g.user.is_admin %}
+        <form method="POST" class="mb-10">
+            <textarea name="text" rows="3" required placeholder="Leave constructive feedback or offer to team up..." class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mb-3"></textarea>
+            <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">Post Comment</button>
+        </form>
+        {% endif %}
+        <div class="space-y-6">
+            {% for comment in comments %}
+            <div class="bg-gray-50 rounded-lg p-5 border border-gray-100 relative group">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <div class="h-8 w-8 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-bold mr-3">
+                            {{ comment.author.username[0] | upper }}
+                        </div>
+                        <span class="font-bold text-gray-900 mr-2">@{{ comment.author.username }}</span>
+                        <span class="text-xs text-gray-500">{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                    {% if g.user.is_admin %}
+                    <form action="/admin/delete_comment/{{ comment.id }}" method="POST" onsubmit="return confirm('Delete this comment?');">
+                        <button type="submit" class="text-red-500 hover:text-red-700 text-xs font-bold uppercase tracking-wider bg-white px-2 py-1 rounded border border-red-200">Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+                <p class="text-gray-700 pl-11 leading-relaxed">{{ comment.text }}</p>
+            </div>
+            {% else %}
+            <div class="text-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                <p class="text-gray-500 italic">No comments yet. Be the first to leave feedback!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

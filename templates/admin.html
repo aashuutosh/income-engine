@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-8">Platform Administration</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="text-sm text-gray-500 font-medium">Total Standard Users</div>
+            <div class="text-3xl font-bold text-gray-900 mt-2">{{ users|length }}</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="text-sm text-gray-500 font-medium">Generated Projects</div>
+            <div class="text-3xl font-bold text-indigo-600 mt-2">{{ projects|length }}</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="text-sm text-gray-500 font-medium">Total Upvotes</div>
+            <div class="text-3xl font-bold text-green-600 mt-2">{{ votes_count }}</div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="text-sm text-gray-500 font-medium">Total Comments</div>
+            <div class="text-3xl font-bold text-purple-600 mt-2">{{ comments_count }}</div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h3 class="text-lg font-bold text-gray-900">Global Default Project Limit</h3>
+            <p class="text-sm text-gray-500">Update the maximum number of projects allowed for all existing standard users.</p>
+        </div>
+        <form method="POST" action="/admin" class="flex items-center space-x-3">
+            <input type="number" name="global_limit" min="1" required class="w-24 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" placeholder="Limit">
+            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 text-sm font-medium whitespace-nowrap">Update All Users</button>
+        </form>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900">User Directory</h3>
+            </div>
+            <div class="divide-y divide-gray-200 max-h-96 overflow-y-auto">
+                {% for user in users %}
+                <div class="px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <div class="font-bold text-gray-900 flex items-center">
+                            @{{ user.username }}
+                            {% if user.is_banned %}
+                            <span class="ml-2 text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full font-bold">BANNED</span>
+                            {% endif %}
+                        </div>
+                        <div class="text-sm text-gray-500">{{ user.projects|length }} projects generated • <strong class="text-indigo-600">Limit: {{ user.project_limit }}</strong></div>
+                    </div>
+                    <a href="/admin/user/{{ user.id }}" class="bg-gray-100 border border-gray-300 text-gray-700 px-3 py-1 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors">Manage User</a>
+                </div>
+                {% else %}
+                <div class="px-6 py-4 text-gray-500 text-sm">No standard users registered yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-900">All Projects</h3>
+            </div>
+            <div class="divide-y divide-gray-200 max-h-96 overflow-y-auto">
+                {% for project in projects %}
+                <div class="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between">
+                    <div class="mb-2 sm:mb-0">
+                        <div class="font-bold text-gray-900 line-clamp-1">{{ project.title }}</div>
+                        <div class="text-sm text-gray-500">by @{{ project.author.username }} • {{ project.industry_tag }}</div>
+                    </div>
+                    <div class="flex space-x-3 items-center">
+                        <a href="/dashboard/{{ project.id }}" class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">View</a>
+                        <form action="/delete/{{ project.id }}" method="POST" onsubmit="return confirm('Delete this project permanently?');">
+                            <button type="submit" class="text-red-600 hover:text-red-900 text-sm font-medium">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <div class="px-6 py-4 text-gray-500 text-sm">No projects generated yet.</div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
