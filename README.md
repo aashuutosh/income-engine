@@ -12,4 +12,4 @@ Database: PostgreSQL
 We had a blast turning this idea into reality and are incredibly proud of the result. Check it out below! 👇
 🔗 Live Demo: https://lnkd.in/dSwbu265
 💻 GitHub Repo: https://lnkd.in/dAXZkD5p
-A huge shoutout to my amazing team for the hard work: Atharv Singh Raghuvanshi,Ashutosh Pratap Singh,AAniruddh Mishra and Srinath Jha 🙌
+A huge shoutout to my amazing team for the hard work: Atharv Singh Raghuvanshi,Ashutosh Pratap Singh,Aniruddh Mishra and Srinath Jha 🙌
